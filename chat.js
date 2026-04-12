@@ -14,7 +14,7 @@
     cursor: "pointer",
     zIndex: "9999"
   });
-  document.body.appendChild(button);
+  document.body.appendChild(button);/
   
   // === STYLE FOR BUTTONS ===
   const style = document.createElement('style');
@@ -51,16 +51,18 @@
   });
 
   chat.innerHTML = `
-   <div style="background:#2d4b8c;color:white;padding:10px;border-radius:10px 10px 0 0;display:flex;justify-content:space-between;align-items:center;">
-  <span>Philomela Chat</span>
-  <span id="closeChat" style="cursor:pointer;font-weight:bold;">✖</span>
-</div>
-    <div id="messages" style="height:200px;overflow:auto;padding:10px;font-size:14px;"></div>
-    <div style="display:flex;">
-      <input id="input" placeholder="Waar kunnen we je mee helpen?" style="flex:1;padding:8px;border:none;">
-      <button id="sendBtn" style="padding:8px;">→</button>
-    </div>
-  `;
+  <div style="background:#2d4b8c;color:white;padding:10px;border-radius:10px 10px 0 0;display:flex;justify-content:space-between;align-items:center;">
+    <span>Philomela Chat</span>
+    <span onclick="this.closest('div').parentElement.style.display='none'" style="cursor:pointer;font-weight:bold;">✖</span>
+  </div>
+
+  <div id="messages" style="height:200px;overflow:auto;padding:10px;font-size:14px;"></div>
+
+  <div style="display:flex;">
+    <input id="input" placeholder="Waar kunnen we je mee helpen?" style="flex:1;padding:8px;border:none;">
+    <button id="sendBtn" style="padding:8px;">→</button>
+  </div>
+`;
 
   document.body.appendChild(chat);
 
