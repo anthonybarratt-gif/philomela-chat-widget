@@ -1,0 +1,102 @@
+(function () {
+
+  // === CREATE CHAT BUTTON ===
+  const button = document.createElement("div");
+  button.innerHTML = "💬";
+  Object.assign(button.style, {
+    position: "fixed",
+    bottom: "20px",
+    right: "20px",
+    background: "#2d4b8c",
+    color: "white",
+    padding: "12px 15px",
+    borderRadius: "50%",
+    cursor: "pointer",
+    zIndex: "9999"
+  });
+  document.body.appendChild(button);
+
+  // === CREATE CHAT BOX ===
+  const chat = document.createElement("div");
+  Object.assign(chat.style, {
+    position: "fixed",
+    bottom: "80px",
+    right: "20px",
+    width: "300px",
+    background: "white",
+    border: "1px solid #ccc",
+    borderRadius: "10px",
+    display: "none",
+    zIndex: "9999",
+    fontFamily: "Arial, sans-serif"
+  });
+
+  chat.innerHTML = `
+    <div style="background:#2d4b8c;color:white;padding:10px;border-radius:10px 10px 0 0;">
+      Philomela Chat
+    </div>
+    <div id="messages" style="height:200px;overflow:auto;padding:10px;font-size:14px;"></div>
+    <div style="display:flex;">
+      <input id="input" placeholder="Waar kunnen we je mee helpen?" style="flex:1;padding:8px;border:none;">
+      <button id="sendBtn" style="padding:8px;">→</button>
+    </div>
+  `;
+
+  document.body.appendChild(chat);
+
+  // === TOGGLE ===
+  button.onclick = () => {
+    chat.style.display = chat.style.display === "none" ? "block" : "none";
+  };
+
+  // === SEND MESSAGE ===
+  async function sendMessage(text) {
+    const messages = document.getElementById("messages");
+
+    messages.innerHTML += `<div><b>Jij:</b> ${text}</div>`;
+
+    try {
+      const res = await fetch("https://castoton-ai-chatbot.onrender.com/webhook", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: text })
+      });
+
+      const data = await res.json();
+      messages.innerHTML += `<div><b>Philomela:</b> ${data.reply}</div>`;
+    } catch (err) {
+      messages.innerHTML += `<div style="color:red;">Verbinding mislukt</div>`;
+    }
+
+    messages.scrollTop = messages.scrollHeight;
+  }
+
+  // === INIT EVENTS ===
+  setTimeout(() => {
+    const input = document.getElementById("input");
+    const sendBtn = document.getElementById("sendBtn");
+
+    sendBtn.onclick = () => {
+      if (!input.value) return;
+      sendMessage(input.value);
+      input.value = "";
+    };
+
+    input.addEventListener("keypress", (e) => {
+      if (e.key === "Enter") sendBtn.click();
+    });
+
+    // Welcome message
+    const messages = document.getElementById("messages");
+    messages.innerHTML += `
+      <div><b>Philomela:</b> 
+      Hoi! Waar kunnen we je mee helpen? 😊<br>
+      • Concerten<br>
+      • Meedoen<br>
+      • Contact
+      </div>
+    `;
+
+  }, 100);
+
+})();
