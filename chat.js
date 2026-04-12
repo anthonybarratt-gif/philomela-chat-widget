@@ -15,7 +15,27 @@
     zIndex: "9999"
   });
   document.body.appendChild(button);
+  
+  const style = document.createElement('style');
+  style.innerHTML = `
+  #messages button {
+    margin: 4px;
+    padding: 6px 10px;
+    border-radius: 6px;
+    border: 1px solid #2d4b8c;
+    background: white;
+    cursor: pointer;
+  }
+  
 
+  #messages button:hover {
+    background: #2d4b8c;
+    color: white;
+  }
+`;
+document.head.appendChild(style);
+
+  
   // === CREATE CHAT BOX ===
   const chat = document.createElement("div");
   Object.assign(chat.style, {
@@ -89,14 +109,22 @@
     // Welcome message
     const messages = document.getElementById("messages");
     messages.innerHTML += `
-      <div><b>Philomela:</b> 
-      Hoi! Waar kunnen we je mee helpen? 😊<br>
-      • Concerten<br>
-      • Meedoen<br>
-      • Contact
-      </div>
+      messages.innerHTML += `
+  <div><b>Philomela:</b><br>
+  Hoi! Waar kunnen we je mee helpen? 😊
+  </div>
+
+  <div style="margin-top:8px;">
+    <button onclick="window.chatSend('concerten')">🎶 Concerten</button>
+    <button onclick="window.chatSend('meedoen')">🤝 Meedoen</button>
+    <button onclick="window.chatSend('agenda')">📅 Agenda</button>
+    <button onclick="window.chatSend('contact')">💌 Contact</button>
+  </div>
+`;
     `;
 
   }, 100);
+  window.chatSend = sendMessage;
+
 
 })();
