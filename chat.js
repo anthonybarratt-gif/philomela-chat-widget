@@ -53,7 +53,7 @@
   chat.innerHTML = `
     <div style="background:#2d4b8c;color:white;padding:10px;border-radius:10px 10px 0 0;display:flex;justify-content:space-between;align-items:center;">
       <span>Philomela Chat</span>
-      <span onclick="this.closest('div').parentElement.style.display='none'" style="cursor:pointer;font-weight:bold;">✖</span>
+      <span onclick="this.closest('div').parentElement.style.display='none'" style="cursor:pointer;font-weight:bold;color:white;font-size:16px;">✖</span>
     </div>
 
     <div id="messages" style="height:360px;overflow:auto;padding:10px;font-size:14px;"></div>
