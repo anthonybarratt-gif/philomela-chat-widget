@@ -35,13 +35,13 @@
   chat.innerHTML = `
     <div style="background:#2d4b8c;color:white;padding:10px;border-radius:10px 10px 0 0;display:flex;justify-content:space-between;align-items:center;">
       <span>Philomela Chat</span>
-      <span onclick="this.closest('div').parentElement.style.display='none'" style="cursor:pointer;font-weight:bold;color:#ffffff;font-size:18px;">✖</span>
+      <span onclick="this.closest('div').parentElement.style.display='none'" style="cursor:pointer;font-weight:bold;color:#ffffff !important;font-size:18px;">✖</span>
     </div>
 
     <div id="messages" style="height:360px;overflow:auto;padding:10px;font-size:14px;"></div>
 
     <div style="display:flex;">
-      <input id="input" placeholder="Waar kunnen we je mee helpen? / How can we help you?" style="flex:1;padding:8px;border:none;">
+      <input id="input" placeholder="Waar kunnen we je mee helpen?" style="flex:1;padding:8px;border:none;">
       <button id="sendBtn" style="padding:8px;">→</button>
     </div>
   `;
@@ -60,29 +60,28 @@
 
     messages.innerHTML += `<div><b>Jij:</b> ${text}</div>`;
 
-    // === SMART OPTIONS ===
+    // === KEUZES / OVERZICHT ===
     if (
-      lower.includes("choice") ||
-      lower.includes("option") ||
+      lower.includes("keuze") ||
       lower.includes("mogelijk") ||
-      lower.includes("wat kan") ||
-      lower.includes("what can")
+      lower.includes("wat kan")
     ) {
       messages.innerHTML += `
         <div><b>Philomela:</b><br>
-        Here are some things you can explore:<br><br>
+        Je kunt bijvoorbeeld kijken naar:<br><br>
 
-        🎶 Concerts → <a href="https://www.philomela.nl/agenda" target="_blank">Agenda</a><br>
-        🤝 Join a choir → <a href="https://www.philomela.nl/zwaluwkoren/" target="_blank">Meedoen</a><br>
-        💌 Contact → <a href="https://www.philomela.nl/contact/" target="_blank">Contact</a><br><br>
-
-        <i>Je kunt ook vragen naar concerten, meedoen of contact 😊</i>
+        🎶 Concerten → <a href="https://www.philomela.nl/agenda" target="_blank">Agenda</a><br>
+        ❤️ Amour → <a href="https://www.philomela.nl/productie/amour/" target="_blank">Amour</a><br>
+        🐦 Jonge Zwaluwen → <a href="https://www.philomela.nl/productie/jonge-zwaluwen/" target="_blank">Jonge Zwaluwen</a><br>
+        🤝 Zwaluwkoren → <a href="https://www.philomela.nl/zwaluwkoren/" target="_blank">Zwaluwkoren</a><br>
+        🧸 Knuffelconcerten → <a href="https://www.philomela.nl/productie/dierenknuffelconcert/" target="_blank">Knuffelconcert</a><br>
+        💌 Contact → <a href="https://www.philomela.nl/contact/" target="_blank">Contact</a><br>
         </div>
       `;
       return;
     }
 
-    // === QUICK RESPONSES ===
+    // === SNELLE ANTWOORDEN ===
     if (lower.includes("concert")) {
       messages.innerHTML += `<div><b>Philomela:</b><br>
       Bekijk onze concerten:<br>
@@ -91,10 +90,18 @@
       return;
     }
 
-    if (lower.includes("meedoen") || lower.includes("join")) {
+    if (lower.includes("meedoen")) {
       messages.innerHTML += `<div><b>Philomela:</b><br>
       Leuk dat je mee wilt doen!<br>
-      <a href="https://www.philomela.nl/zwaluwkoren/" target="_blank">🤝 Meedoen</a>
+      <a href="https://www.philomela.nl/zwaluwkoren/" target="_blank">🤝 Zwaluwkoren</a>
+      </div>`;
+      return;
+    }
+
+    if (lower.includes("knuffel")) {
+      messages.innerHTML += `<div><b>Philomela:</b><br>
+      Onze knuffelconcerten bieden een warme en persoonlijke beleving:<br>
+      <a href="https://www.philomela.nl/productie/dierenknuffelconcert/" target="_blank">🧸 Knuffelconcert</a>
       </div>`;
       return;
     }
@@ -107,11 +114,11 @@
       return;
     }
 
-    // === LOADING MESSAGE ===
-    messages.innerHTML += `<div id="loading"><b>Philomela:</b> Even verbinden... / Connecting...</div>`;
+    // === LADEN MELDING ===
+    messages.innerHTML += `<div id="loading"><b>Philomela:</b> Even verbinden...</div>`;
     messages.scrollTop = messages.scrollHeight;
 
-    // === BACKEND CALL ===
+    // === BACKEND (AI) ===
     try {
       const res = await fetch("https://castoton-ai-chatbot.onrender.com/webhook", {
         method: "POST",
@@ -130,8 +137,7 @@
       if (loading) loading.remove();
 
       messages.innerHTML += `<div style="color:red;">
-        <b>Philomela:</b> Verbinding mislukt. Probeer opnieuw.<br>
-        <i>Connection failed. Please try again.</i>
+        <b>Philomela:</b> Verbinding mislukt. Probeer opnieuw.
       </div>`;
     }
 
@@ -157,13 +163,11 @@
       if (e.key === "Enter") sendBtn.click();
     });
 
-    // === WELCOME MESSAGE ===
+    // === WELKOMST ===
     messages.innerHTML += `
       <div><b>Philomela:</b><br>
-      Hoi! Waar kunnen we je mee helpen? 😊<br>
-      <i>Hi! How can we help you?</i><br><br>
-      Je kunt vragen naar concerten, meedoen of contact.<br>
-      <i>You can ask about concerts, joining or contact.</i>
+      Hoi! Waar kunnen we je mee helpen? 😊<br><br>
+      Je kunt vragen naar concerten, meedoen, knuffelconcerten of contact.
       </div>
     `;
 
