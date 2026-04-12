@@ -16,6 +16,7 @@
   });
   document.body.appendChild(button);
   
+  // === STYLE FOR BUTTONS ===
   const style = document.createElement('style');
   style.innerHTML = `
   #messages button {
@@ -26,16 +27,14 @@
     background: white;
     cursor: pointer;
   }
-  
 
   #messages button:hover {
     background: #2d4b8c;
     color: white;
   }
-`;
-document.head.appendChild(style);
+  `;
+  document.head.appendChild(style);
 
-  
   // === CREATE CHAT BOX ===
   const chat = document.createElement("div");
   Object.assign(chat.style, {
@@ -91,6 +90,9 @@ document.head.appendChild(style);
     messages.scrollTop = messages.scrollHeight;
   }
 
+  // Make function available for buttons
+  window.chatSend = sendMessage;
+
   // === INIT EVENTS ===
   setTimeout(() => {
     const input = document.getElementById("input");
@@ -106,25 +108,21 @@ document.head.appendChild(style);
       if (e.key === "Enter") sendBtn.click();
     });
 
-    // Welcome message
+    // === WELCOME MESSAGE WITH BUTTONS ===
     const messages = document.getElementById("messages");
     messages.innerHTML += `
-      messages.innerHTML += `
-  <div><b>Philomela:</b><br>
-  Hoi! Waar kunnen we je mee helpen? 😊
-  </div>
+      <div><b>Philomela:</b><br>
+      Hoi! Waar kunnen we je mee helpen? 😊
+      </div>
 
-  <div style="margin-top:8px;">
-    <button onclick="window.chatSend('concerten')">🎶 Concerten</button>
-    <button onclick="window.chatSend('meedoen')">🤝 Meedoen</button>
-    <button onclick="window.chatSend('agenda')">📅 Agenda</button>
-    <button onclick="window.chatSend('contact')">💌 Contact</button>
-  </div>
-`;
+      <div style="margin-top:8px;">
+        <button onclick="window.chatSend('concerten')">🎶 Concerten</button>
+        <button onclick="window.chatSend('meedoen')">🤝 Meedoen</button>
+        <button onclick="window.chatSend('agenda')">📅 Agenda</button>
+        <button onclick="window.chatSend('contact')">💌 Contact</button>
+      </div>
     `;
 
   }, 100);
-  window.chatSend = sendMessage;
-
 
 })();
