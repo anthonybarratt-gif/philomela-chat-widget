@@ -3,7 +3,7 @@
   // === CREATE CHAT BUTTON ===
   const button = document.createElement("div");
   button.innerHTML = "💬";
-  Object.assign(button.style, {
+  Object.assign(button.style, {////
     position: "fixed",
     bottom: "20px",
     right: "20px",
@@ -98,7 +98,14 @@
   setTimeout(() => {
     const input = document.getElementById("input");
     const sendBtn = document.getElementById("sendBtn");
+    const closeBtn = document.getElementById("closeChat");
 
+closeBtn.onclick = () => {
+  chat.style.display = "none";
+  / Clear messages (reset chat)
+  const messages = document.getElementById("messages");
+  messages.innerHTML = "";
+};
     sendBtn.onclick = () => {
       if (!input.value) return;
       sendMessage(input.value);
