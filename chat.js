@@ -12,8 +12,7 @@
     padding: "12px 15px",
     borderRadius: "50%",
     cursor: "pointer",
-    zIndex: "9999"
-  });
+    zIndex: "9999"  });
   document.body.appendChild(button);
 
   // === STYLE ===
@@ -41,7 +40,8 @@
     position: "fixed",
     bottom: "80px",
     right: "20px",
-    width: "300px",
+    width: "360px",
+    height: "460px",
     background: "white",
     border: "1px solid #ccc",
     borderRadius: "10px",
@@ -56,7 +56,7 @@
       <span onclick="this.closest('div').parentElement.style.display='none'" style="cursor:pointer;font-weight:bold;">✖</span>
     </div>
 
-    <div id="messages" style="height:200px;overflow:auto;padding:10px;font-size:14px;"></div>
+    <div id="messages" style="height:360px;overflow:auto;padding:10px;font-size:14px;"></div>
 
     <div style="display:flex;">
       <input id="input" placeholder="Waar kunnen we je mee helpen?" style="flex:1;padding:8px;border:none;">
