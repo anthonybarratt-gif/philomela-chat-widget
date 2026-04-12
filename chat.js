@@ -3,7 +3,7 @@
   // === CREATE CHAT BUTTON ===
   const button = document.createElement("div");
   button.innerHTML = "💬";
-  Object.assign(button.style, {////
+  Object.assign(button.style, {
     position: "fixed",
     bottom: "20px",
     right: "20px",
@@ -14,24 +14,24 @@
     cursor: "pointer",
     zIndex: "9999"
   });
-  document.body.appendChild(button);/
-  
-  // === STYLE FOR BUTTONS ===
+  document.body.appendChild(button);
+
+  // === STYLE ===
   const style = document.createElement('style');
   style.innerHTML = `
-  #messages button {
-    margin: 4px;
-    padding: 6px 10px;
-    border-radius: 6px;
-    border: 1px solid #2d4b8c;
-    background: white;
-    cursor: pointer;
-  }
+    #messages button {
+      margin: 4px;
+      padding: 6px 10px;
+      border-radius: 6px;
+      border: 1px solid #2d4b8c;
+      background: white;
+      cursor: pointer;
+    }
 
-  #messages button:hover {
-    background: #2d4b8c;
-    color: white;
-  }
+    #messages button:hover {
+      background: #2d4b8c;
+      color: white;
+    }
   `;
   document.head.appendChild(style);
 
@@ -51,18 +51,18 @@
   });
 
   chat.innerHTML = `
-  <div style="background:#2d4b8c;color:white;padding:10px;border-radius:10px 10px 0 0;display:flex;justify-content:space-between;align-items:center;">
-    <span>Philomela Chat</span>
-    <span onclick="this.closest('div').parentElement.style.display='none'" style="cursor:pointer;font-weight:bold;">✖</span>
-  </div>
+    <div style="background:#2d4b8c;color:white;padding:10px;border-radius:10px 10px 0 0;display:flex;justify-content:space-between;align-items:center;">
+      <span>Philomela Chat</span>
+      <span onclick="this.closest('div').parentElement.style.display='none'" style="cursor:pointer;font-weight:bold;">✖</span>
+    </div>
 
-  <div id="messages" style="height:200px;overflow:auto;padding:10px;font-size:14px;"></div>
+    <div id="messages" style="height:200px;overflow:auto;padding:10px;font-size:14px;"></div>
 
-  <div style="display:flex;">
-    <input id="input" placeholder="Waar kunnen we je mee helpen?" style="flex:1;padding:8px;border:none;">
-    <button id="sendBtn" style="padding:8px;">→</button>
-  </div>
-`;
+    <div style="display:flex;">
+      <input id="input" placeholder="Waar kunnen we je mee helpen?" style="flex:1;padding:8px;border:none;">
+      <button id="sendBtn" style="padding:8px;">→</button>
+    </div>
+  `;
 
   document.body.appendChild(chat);
 
@@ -74,9 +74,42 @@
   // === SEND MESSAGE ===
   async function sendMessage(text) {
     const messages = document.getElementById("messages");
+    const lower = text.toLowerCase().trim();
 
     messages.innerHTML += `<div><b>Jij:</b> ${text}</div>`;
 
+    // Local button handling
+    if (lower === "concerten") {
+      messages.innerHTML += `<div><b>Philomela:</b><br>
+      Bekijk onze concerten:<br>
+      <a href="https://www.philomela.nl/agenda" target="_blank">📅 Agenda</a>
+      </div>`;
+      return;
+    }
+
+    if (lower === "meedoen") {
+      messages.innerHTML += `<div><b>Philomela:</b><br>
+      Doe mee met een koor:<br>
+      <a href="https://www.philomela.nl/zwaluwkoren/" target="_blank">🤝 Meedoen</a>
+      </div>`;
+      return;
+    }
+
+    if (lower === "agenda") {
+      messages.innerHTML += `<div><b>Philomela:</b><br>
+      <a href="https://www.philomela.nl/agenda" target="_blank">📅 Agenda</a>
+      </div>`;
+      return;
+    }
+
+    if (lower === "contact") {
+      messages.innerHTML += `<div><b>Philomela:</b><br>
+      <a href="https://www.philomela.nl/contact/" target="_blank">💌 Contact</a>
+      </div>`;
+      return;
+    }
+
+    // Backend fallback
     try {
       const res = await fetch("https://castoton-ai-chatbot.onrender.com/webhook", {
         method: "POST",
@@ -93,21 +126,15 @@
     messages.scrollTop = messages.scrollHeight;
   }
 
-  // Make function available for buttons
+  // Expose globally
   window.chatSend = sendMessage;
 
-  // === INIT EVENTS ===
+  // === INIT ===
   setTimeout(() => {
     const input = document.getElementById("input");
     const sendBtn = document.getElementById("sendBtn");
-    const closeBtn = document.getElementById("closeChat");
+    const messages = document.getElementById("messages");
 
-closeBtn.onclick = () => {
-  chat.style.display = "none";
-  / Clear messages (reset chat)
-  const messages = document.getElementById("messages");
-  messages.innerHTML = "";
-};
     sendBtn.onclick = () => {
       if (!input.value) return;
       sendMessage(input.value);
@@ -118,8 +145,6 @@ closeBtn.onclick = () => {
       if (e.key === "Enter") sendBtn.click();
     });
 
-    // === WELCOME MESSAGE WITH BUTTONS ===
-    const messages = document.getElementById("messages");
     messages.innerHTML += `
       <div><b>Philomela:</b><br>
       Hoi! Waar kunnen we je mee helpen? 😊
