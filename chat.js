@@ -60,7 +60,7 @@
 
     messages.innerHTML += `<div><b>Jij:</b> ${text}</div>`;
 
-    // === KEUZES / OVERZICHT ===
+    // === KEUZES ===
     if (
       lower.includes("keuze") ||
       lower.includes("mogelijk") ||
@@ -78,47 +78,55 @@
         💌 Contact → <a href="https://www.philomela.nl/contact/" target="_blank">Contact</a><br>
         </div>
       `;
+      messages.innerHTML += `<div><i>Wil je dat ik meer uitleg geef? 😊</i></div>`;
       return;
     }
 
-    // === SNELLE ANTWOORDEN ===
-    if (lower.includes("concert")) {
-      messages.innerHTML += `<div><b>Philomela:</b><br>
-      Bekijk onze concerten:<br>
-      <a href="https://www.philomela.nl/agenda" target="_blank">📅 Agenda</a>
-      </div>`;
-      return;
-    }
-
-    if (lower.includes("meedoen")) {
-      messages.innerHTML += `<div><b>Philomela:</b><br>
-      Leuk dat je mee wilt doen!<br>
-      <a href="https://www.philomela.nl/zwaluwkoren/" target="_blank">🤝 Zwaluwkoren</a>
-      </div>`;
-      return;
-    }
-
+    // === KNuffel eerst (belangrijk!) ===
     if (lower.includes("knuffel")) {
       messages.innerHTML += `<div><b>Philomela:</b><br>
       Onze knuffelconcerten bieden een warme en persoonlijke beleving:<br>
       <a href="https://www.philomela.nl/productie/dierenknuffelconcert/" target="_blank">🧸 Knuffelconcert</a>
       </div>`;
+      messages.innerHTML += `<div><i>Wil je dat ik meer uitleg geef? 😊</i></div>`;
       return;
     }
 
+    // === CONCERTEN ===
+    if (lower.includes("concert")) {
+      messages.innerHTML += `<div><b>Philomela:</b><br>
+      Bekijk onze concerten:<br>
+      <a href="https://www.philomela.nl/agenda" target="_blank">📅 Agenda</a>
+      </div>`;
+      messages.innerHTML += `<div><i>Wil je dat ik meer uitleg geef? 😊</i></div>`;
+      return;
+    }
+
+    // === MEEDOEN ===
+    if (lower.includes("meedoen")) {
+      messages.innerHTML += `<div><b>Philomela:</b><br>
+      Leuk dat je mee wilt doen!<br>
+      <a href="https://www.philomela.nl/zwaluwkoren/" target="_blank">🤝 Zwaluwkoren</a>
+      </div>`;
+      messages.innerHTML += `<div><i>Wil je dat ik meer uitleg geef? 😊</i></div>`;
+      return;
+    }
+
+    // === CONTACT ===
     if (lower.includes("contact")) {
       messages.innerHTML += `<div><b>Philomela:</b><br>
       Neem contact met ons op:<br>
       <a href="https://www.philomela.nl/contact/" target="_blank">💌 Contact</a>
       </div>`;
+      messages.innerHTML += `<div><i>Wil je dat ik meer uitleg geef? 😊</i></div>`;
       return;
     }
 
-    // === LADEN MELDING ===
+    // === LADEN ===
     messages.innerHTML += `<div id="loading"><b>Philomela:</b> Even verbinden...</div>`;
     messages.scrollTop = messages.scrollHeight;
 
-    // === BACKEND (AI) ===
+    // === AI BACKEND ===
     try {
       const res = await fetch("https://castoton-ai-chatbot.onrender.com/webhook", {
         method: "POST",
@@ -144,7 +152,7 @@
     messages.scrollTop = messages.scrollHeight;
   }
 
-  // Expose globally
+  // === GLOBAL ===
   window.chatSend = sendMessage;
 
   // === INIT ===
@@ -163,7 +171,6 @@
       if (e.key === "Enter") sendBtn.click();
     });
 
-    // === WELKOMST ===
     messages.innerHTML += `
       <div><b>Philomela:</b><br>
       Hoi! Waar kunnen we je mee helpen? 😊<br><br>
