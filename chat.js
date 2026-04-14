@@ -1,5 +1,7 @@
 (function () {
 
+  const VERSION = "v0.900";
+
   // === SESSION ID — persists across page reloads so Aria remembers the conversation ===
   let sessionId = sessionStorage.getItem("philomela_session_id");
   if (!sessionId) {
@@ -61,7 +63,7 @@
 
   chat.innerHTML = `
     <div style="background:#2d4b8c;color:white;padding:10px;border-radius:10px 10px 0 0;display:flex;justify-content:space-between;align-items:center;">
-      <span>Philomela Chat</span>
+      <span>Philomela Chat <span style="font-size:11px;opacity:0.7;font-weight:normal;">${VERSION}</span></span>
       <span id="philo-close" style="cursor:pointer;font-weight:bold;font-size:18px;color:white !important;">✖</span>
     </div>
     <div id="philo-messages" style="height:calc(100% - 110px);overflow:auto;padding:10px;font-size:14px;line-height:1.5;"></div>
