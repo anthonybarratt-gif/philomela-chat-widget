@@ -1,6 +1,6 @@
 (function () {
 
-  const VERSION = "v0.916";
+  const VERSION = "v0.917";
 
   // === CONVERSATION STATE — keyword shortcuts only fire on the first message ===
   let messageCount = 0;
