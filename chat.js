@@ -1,6 +1,6 @@
 (function () {
 
-  const VERSION = "v0.913";
+  const VERSION = "v0.914";
 
   // === CONVERSATION STATE — keyword shortcuts only fire on the first message ===
   let messageCount = 0;
@@ -14,19 +14,35 @@
     sessionStorage.setItem("philomela_session_id", sessionId);
   }
 
-  // === SAFE TEXT — prevents XSS by never injecting user/AI content via innerHTML ===
+  // === SAFE TEXT — prevents XSS by never injecting user content via innerHTML ===
   function safeText(str) {
     const div = document.createElement("div");
     div.appendChild(document.createTextNode(str));
     return div.innerHTML;
   }
 
+  // === LINKIFY — converts URLs in Aria replies to clickable links (safe: applied after safeText) ===
+  function linkify(str) {
+    return safeText(str).replace(
+      /(https?:\/\/[^\s<>"]+)/g,
+      '<a href="$1" target="_blank" style="color:#2d4b8c;">$1</a>'
+    );
+  }
+
   function appendMessage(sender, htmlContent, isHTML) {
     const messages = document.getElementById("philo-messages");
     const div = document.createElement("div");
     div.style.marginBottom = "8px";
-    // isHTML is only true for our own hardcoded link blocks — never for user input or AI replies
-    div.innerHTML = isHTML ? `<b>${sender}:</b><br>${htmlContent}` : `<b>${safeText(sender)}:</b> ${safeText(htmlContent)}`;
+    if (isHTML) {
+      // Our own hardcoded blocks with links
+      div.innerHTML = `<b>${sender}:</b><br>${htmlContent}`;
+    } else if (sender === "Philomela" || sender === "Aria") {
+      // AI replies — safe text but with clickable URLs
+      div.innerHTML = `<b>${safeText(sender)}:</b> ${linkify(htmlContent)}`;
+    } else {
+      // User messages — plain safe text only
+      div.innerHTML = `<b>${safeText(sender)}:</b> ${safeText(htmlContent)}`;
+    }
     messages.appendChild(div);
     messages.scrollTop = messages.scrollHeight;
     return div;
@@ -99,12 +115,7 @@
     const typing = document.getElementById("philo-typing");
     const lower = text.toLowerCase().trim();
 
-    appendMessage(userLabel, text);
-    input.disabled = true;
-    sendBtn.disabled = true;
-    messageCount++;
-
-    // === LANGUAGE SELECTION — hardcoded intro, no AI call ===
+    // === LANGUAGE SELECTION — hardcoded intro, no AI call, no user message shown ===
     const langIntros = {
       "nederlands": { reply: "Hoi! Ik ben Aria 😊 Bij Philomela kun je terecht voor concerten (zoals Amour), Jonge Zwaluwen (een muziekproject voor kinderen), Zwaluwkoor (samen zingen in een koor) en Knuffelconcerten (laagdrempelige interactieve concerten). Waar ben je nieuwsgierig naar?", placeholder: "Waar kunnen we je mee helpen?", label: "Jij", lang: "nl" },
       "english":    { reply: "Hi! I'm Aria 😊 At Philomela you can enjoy concerts (like Amour), Jonge Zwaluwen (a music project for children), Zwaluwkoor (a community singing choir), and Knuffelconcerten (cosy interactive concerts). What interests you most?", placeholder: "How can we help you?", label: "You", lang: "en" },
@@ -117,9 +128,15 @@
       activeLang = langIntros[lower].lang;
       appendMessage("Philomela", langIntros[lower].reply);
       document.getElementById("philo-input").placeholder = langIntros[lower].placeholder;
-      reset();
+      input.disabled = false;
+      sendBtn.disabled = false;
       return;
     }
+
+    appendMessage(userLabel, text);
+    input.disabled = true;
+    sendBtn.disabled = true;
+    messageCount++;
 
     // === KEYWORD SHORTCUTS — only on first message, not mid-conversation ===
     if (messageCount === 1 && (lower.includes("keuze") || lower.includes("mogelijk") || lower.includes("wat kan"))) {
