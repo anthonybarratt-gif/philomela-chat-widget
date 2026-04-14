@@ -1,6 +1,6 @@
 (function () {
 
-  const VERSION = "v0.907";
+  const VERSION = "v0.908";
 
   // === CONVERSATION STATE — keyword shortcuts only fire on the first message ===
   let messageCount = 0;
@@ -101,6 +101,20 @@
     input.disabled = true;
     sendBtn.disabled = true;
     messageCount++;
+
+    // === LANGUAGE SELECTION — hardcoded intro, no AI call ===
+    const langIntros = {
+      "nederlands": "Hoi! Ik ben Aria 😊 Bij Philomela kun je terecht voor concerten (zoals Amour), Jonge Zwaluwen (een muziekproject voor kinderen), Zwaluwkoor (samen zingen in een koor) en Knuffelconcerten (laagdrempelige interactieve concerten). Waar ben je nieuwsgierig naar?",
+      "english":    "Hi! I'm Aria 😊 At Philomela you can enjoy concerts (like Amour), Jonge Zwaluwen (a music project for children), Zwaluwkoor (a community singing choir), and Knuffelconcerten (cosy interactive concerts). What interests you most?",
+      "français":   "Bonjour ! Je suis Aria 😊 Chez Philomela, vous trouverez des concerts (comme Amour), Jonge Zwaluwen (un projet musical pour enfants), Zwaluwkoor (un chœur communautaire) et des Knuffelconcerten (concerts interactifs et chaleureux). Qu'est-ce qui vous intéresse ?",
+      "frans":      "Bonjour ! Je suis Aria 😊 Chez Philomela, vous trouverez des concerts (comme Amour), Jonge Zwaluwen (un projet musical pour enfants), Zwaluwkoor (un chœur communautaire) et des Knuffelconcerten (concerts interactifs et chaleureux). Qu'est-ce qui vous intéresse ?"
+    };
+
+    if (langIntros[lower]) {
+      appendMessage("Philomela", langIntros[lower]);
+      reset();
+      return;
+    }
 
     // === KEYWORD SHORTCUTS — only on first message, not mid-conversation ===
     if (messageCount === 1 && (lower.includes("keuze") || lower.includes("mogelijk") || lower.includes("wat kan"))) {
