@@ -1,10 +1,11 @@
 (function () {
 
-  const VERSION = "v0.911";
+  const VERSION = "v0.912";
 
   // === CONVERSATION STATE — keyword shortcuts only fire on the first message ===
   let messageCount = 0;
-  let userLabel = "Jij"; // switches on language selection
+  let userLabel = "Jij";   // switches on language selection
+  let activeLang = "nl";   // "nl" | "en" | "fr"
 
   // === SESSION ID — persists across page reloads so Aria remembers the conversation ===
   let sessionId = sessionStorage.getItem("philomela_session_id");
@@ -105,14 +106,15 @@
 
     // === LANGUAGE SELECTION — hardcoded intro, no AI call ===
     const langIntros = {
-      "nederlands": { reply: "Hoi! Ik ben Aria 😊 Bij Philomela kun je terecht voor concerten (zoals Amour), Jonge Zwaluwen (een muziekproject voor kinderen), Zwaluwkoor (samen zingen in een koor) en Knuffelconcerten (laagdrempelige interactieve concerten). Waar ben je nieuwsgierig naar?", placeholder: "Waar kunnen we je mee helpen?", label: "Jij" },
-      "english":    { reply: "Hi! I'm Aria 😊 At Philomela you can enjoy concerts (like Amour), Jonge Zwaluwen (a music project for children), Zwaluwkoor (a community singing choir), and Knuffelconcerten (cosy interactive concerts). What interests you most?", placeholder: "How can we help you?", label: "You" },
-      "français":   { reply: "Bonjour ! Je suis Aria 😊 Chez Philomela, vous trouverez des concerts (comme Amour), Jonge Zwaluwen (un projet musical pour enfants), Zwaluwkoor (un chœur communautaire) et des Knuffelconcerten (concerts interactifs et chaleureux). Qu'est-ce qui vous intéresse ?", placeholder: "Comment pouvons-nous vous aider ?", label: "Vous" },
-      "frans":      { reply: "Bonjour ! Je suis Aria 😊 Chez Philomela, vous trouverez des concerts (comme Amour), Jonge Zwaluwen (un projet musical pour enfants), Zwaluwkoor (un chœur communautaire) et des Knuffelconcerten (concerts interactifs et chaleureux). Qu'est-ce qui vous intéresse ?", placeholder: "Comment pouvons-nous vous aider ?", label: "Vous" }
+      "nederlands": { reply: "Hoi! Ik ben Aria 😊 Bij Philomela kun je terecht voor concerten (zoals Amour), Jonge Zwaluwen (een muziekproject voor kinderen), Zwaluwkoor (samen zingen in een koor) en Knuffelconcerten (laagdrempelige interactieve concerten). Waar ben je nieuwsgierig naar?", placeholder: "Waar kunnen we je mee helpen?", label: "Jij", lang: "nl" },
+      "english":    { reply: "Hi! I'm Aria 😊 At Philomela you can enjoy concerts (like Amour), Jonge Zwaluwen (a music project for children), Zwaluwkoor (a community singing choir), and Knuffelconcerten (cosy interactive concerts). What interests you most?", placeholder: "How can we help you?", label: "You", lang: "en" },
+      "français":   { reply: "Bonjour ! Je suis Aria 😊 Chez Philomela, vous trouverez des concerts (comme Amour), Jonge Zwaluwen (un projet musical pour enfants), Zwaluwkoor (un chœur communautaire) et des Knuffelconcerten (concerts interactifs et chaleureux). Qu'est-ce qui vous intéresse ?", placeholder: "Comment pouvons-nous vous aider ?", label: "Vous", lang: "fr" },
+      "frans":      { reply: "Bonjour ! Je suis Aria 😊 Chez Philomela, vous trouverez des concerts (comme Amour), Jonge Zwaluwen (un projet musical pour enfants), Zwaluwkoor (un chœur communautaire) et des Knuffelconcerten (concerts interactifs et chaleureux). Qu'est-ce qui vous intéresse ?", placeholder: "Comment pouvons-nous vous aider ?", label: "Vous", lang: "fr" }
     };
 
     if (langIntros[lower]) {
       userLabel = langIntros[lower].label;
+      activeLang = langIntros[lower].lang;
       appendMessage("Philomela", langIntros[lower].reply);
       document.getElementById("philo-input").placeholder = langIntros[lower].placeholder;
       reset();
@@ -164,7 +166,7 @@
       const res = await fetch("https://castoton-ai-chatbot.onrender.com/webhook", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: text, session_id: sessionId })
+        body: JSON.stringify({ message: text, session_id: sessionId, language: activeLang })
       });
 
       if (!res.ok) throw new Error(`Server error: ${res.status}`);
@@ -188,7 +190,7 @@
     sendBtn.disabled = false;
     typing.style.display = "none";
     input.focus();
-    if (clearSession) { messageCount = 0; userLabel = "Jij"; }
+    if (clearSession) { messageCount = 0; userLabel = "Jij"; activeLang = "nl"; }
   }
 
   // === WIRE UP SEND BUTTON + ENTER KEY ===
