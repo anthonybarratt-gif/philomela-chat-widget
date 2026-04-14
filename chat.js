@@ -188,6 +188,6 @@
   });
 
   // === WELCOME MESSAGE ===
-  appendMessage("Philomela", `Hoi! Waar kunnen we je mee helpen? 😊\n\nJe kunt vragen naar concerten, meedoen, knuffelconcerten of contact.`);
+  appendMessage("Philomela", `Hoi! Waar kunnen we je mee helpen? 😊 Je kunt vragen naar concerten, meedoen, knuffelconcerten of contact.`);
 
 })();
