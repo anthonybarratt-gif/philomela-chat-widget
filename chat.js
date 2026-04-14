@@ -1,11 +1,12 @@
 (function () {
 
-  const VERSION = "v0.914";
+  const VERSION = "v0.916";
 
   // === CONVERSATION STATE — keyword shortcuts only fire on the first message ===
   let messageCount = 0;
-  let userLabel = "Jij";   // switches on language selection
-  let activeLang = "nl";   // "nl" | "en" | "fr"
+  let userLabel = "Jij";          // switches on language selection
+  let activeLang = "nl";          // "nl" | "en" | "fr"
+  let awaitingConfirmation = false; // true after Aria offers handoff
 
   // === SESSION ID — persists across page reloads so Aria remembers the conversation ===
   let sessionId = sessionStorage.getItem("philomela_session_id");
@@ -115,6 +116,39 @@
     const typing = document.getElementById("philo-typing");
     const lower = text.toLowerCase().trim();
 
+    // === CONFIRMATION HANDLER — client-side, no server state needed ===
+    if (awaitingConfirmation) {
+      const yes = ["ja", "graag", "ok", "prima", "yes", "oui", "yep", "sure"].some(w => lower.includes(w));
+      const no  = ["nee", "niet", "hoeft niet", "no", "non", "nope"].some(w => lower.includes(w));
+
+      const contactMsg = {
+        nl: "Alle contactgegevens vind je op https://www.philomela.nl/contact/ — stuur gerust een e-mail en het team reageert zo snel mogelijk. Tot snel! 😊",
+        en: "You can find all contact details at https://www.philomela.nl/contact/ — send an email and the team will get back to you as soon as possible. Speak soon! 😊",
+        fr: "Tous les contacts sont sur https://www.philomela.nl/contact/ — envoie un e-mail et l'équipe te répondra dès que possible. À bientôt ! 😊"
+      };
+      const declineMsg = {
+        nl: "Helemaal goed! Laat het gerust weten als je nog vragen hebt. 😊",
+        en: "No problem at all! Feel free to ask if you have more questions. 😊",
+        fr: "Pas de problème ! N'hésite pas si tu as d'autres questions. 😊"
+      };
+
+      if (yes) {
+        appendMessage(userLabel, text);
+        appendMessage("Philomela", contactMsg[activeLang] || contactMsg.nl);
+        awaitingConfirmation = false;
+        messageCount = 0;
+        reset(true);
+        return;
+      } else if (no) {
+        appendMessage(userLabel, text);
+        appendMessage("Philomela", declineMsg[activeLang] || declineMsg.nl);
+        awaitingConfirmation = false;
+        messageCount = 0;
+        reset(true);
+        return;
+      }
+    }
+
     // === LANGUAGE SELECTION — hardcoded intro, no AI call, no user message shown ===
     const langIntros = {
       "nederlands": { reply: "Hoi! Ik ben Aria 😊 Bij Philomela kun je terecht voor concerten (zoals Amour), Jonge Zwaluwen (een muziekproject voor kinderen), Zwaluwkoor (samen zingen in een koor) en Knuffelconcerten (laagdrempelige interactieve concerten). Waar ben je nieuwsgierig naar?", placeholder: "Waar kunnen we je mee helpen?", label: "Jij", lang: "nl" },
@@ -201,6 +235,12 @@
       const data = await res.json();
       appendMessage("Philomela", data.reply);
 
+      // Detect handoff offer in Aria's reply
+      const handoffPhrases = ["contact met je opneemt", "contact opnemen", "benadert", "get in touch", "reach out", "te contacter", "te contacte"];
+      if (handoffPhrases.some(p => data.reply.toLowerCase().includes(p))) {
+        awaitingConfirmation = true;
+      }
+
     } catch (err) {
       appendMessage("Philomela", "Verbinding mislukt. Probeer opnieuw.");
       console.error("[Philomela chat error]", err);
@@ -217,7 +257,7 @@
     sendBtn.disabled = false;
     typing.style.display = "none";
     input.focus();
-    if (clearSession) { messageCount = 0; userLabel = "Jij"; activeLang = "nl"; }
+    if (clearSession) { messageCount = 0; userLabel = "Jij"; activeLang = "nl"; awaitingConfirmation = false; }
   }
 
   // === WIRE UP SEND BUTTON + ENTER KEY ===
