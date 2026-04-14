@@ -62,7 +62,7 @@
   chat.innerHTML = `
     <div style="background:#2d4b8c;color:white;padding:10px;border-radius:10px 10px 0 0;display:flex;justify-content:space-between;align-items:center;">
       <span>Philomela Chat</span>
-      <span id="philo-close" style="cursor:pointer;font-weight:bold;font-size:18px;color:white;">✖</span>
+      <span id="philo-close" style="cursor:pointer;font-weight:bold;font-size:18px;color:white !important;">✖</span>
     </div>
     <div id="philo-messages" style="height:350px;overflow:auto;padding:10px;font-size:14px;line-height:1.5;"></div>
     <div id="philo-typing" style="padding:0 10px 4px;font-size:12px;color:#999;display:none;">Aria typt...</div>
