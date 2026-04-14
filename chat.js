@@ -1,6 +1,6 @@
 (function () {
 
-  const VERSION = "v0.903";
+  const VERSION = "v0.904";
 
   // === CONVERSATION STATE — keyword shortcuts only fire on the first message ===
   let messageCount = 0;
@@ -196,5 +196,28 @@
 
   // === WELCOME MESSAGE ===
   appendMessage("Philomela", `Hoi! Waar kunnen we je mee helpen? 😊 Je kunt vragen naar concerten, meedoen (meezingen in een koor), knuffelconcerten of contact.`);
+
+  // === LANGUAGE BUTTONS ===
+  const langDiv = document.createElement("div");
+  langDiv.id = "philo-lang";
+  langDiv.style.cssText = "padding:4px 10px 8px;display:flex;gap:8px;";
+
+  ["🇳🇱 Nederlands", "🇬🇧 English"].forEach((label) => {
+    const btn = document.createElement("button");
+    btn.textContent = label;
+    btn.style.cssText = `
+      padding:4px 10px;font-size:12px;cursor:pointer;
+      border:1px solid #2d4b8c;border-radius:12px;
+      background:white;color:#2d4b8c;
+    `;
+    btn.onclick = () => {
+      const lang = label.includes("English") ? "English" : "Nederlands";
+      langDiv.remove();
+      sendMessage(lang);
+    };
+    langDiv.appendChild(btn);
+  });
+
+  document.getElementById("philo-messages").appendChild(langDiv);
 
 })();
