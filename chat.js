@@ -1,6 +1,6 @@
 (function () {
 
-  const VERSION = "v0.900";
+  const VERSION = "v0.902";
 
   // === SESSION ID — persists across page reloads so Aria remembers the conversation ===
   let sessionId = sessionStorage.getItem("philomela_session_id");
@@ -190,6 +190,6 @@
   });
 
   // === WELCOME MESSAGE ===
-  appendMessage("Philomela", `Hoi! Waar kunnen we je mee helpen? 😊 Je kunt vragen naar concerten, meedoen, knuffelconcerten of contact.`);
+  appendMessage("Philomela", `Hoi! Waar kunnen we je mee helpen? 😊 Je kunt vragen naar concerten, meedoen (meezingen in een koor), knuffelconcerten of contact.`);
 
 })();
