@@ -1,6 +1,9 @@
 (function () {
 
-  const VERSION = "v0.902";
+  const VERSION = "v0.903";
+
+  // === CONVERSATION STATE — keyword shortcuts only fire on the first message ===
+  let messageCount = 0;
 
   // === SESSION ID — persists across page reloads so Aria remembers the conversation ===
   let sessionId = sessionStorage.getItem("philomela_session_id");
@@ -97,9 +100,10 @@
     appendMessage("Jij", text);
     input.disabled = true;
     sendBtn.disabled = true;
+    messageCount++;
 
-    // === KEYWORD SHORTCUTS — no AI call needed ===
-    if (lower.includes("keuze") || lower.includes("mogelijk") || lower.includes("wat kan")) {
+    // === KEYWORD SHORTCUTS — only on first message, not mid-conversation ===
+    if (messageCount === 1 && (lower.includes("keuze") || lower.includes("mogelijk") || lower.includes("wat kan"))) {
       appendMessage("Philomela", `
         Je kunt bijvoorbeeld kijken naar:<br><br>
         🎶 Concerten → <a href="https://www.philomela.nl/agenda" target="_blank">Agenda</a><br>
@@ -112,25 +116,25 @@
       reset(); return;
     }
 
-    if (lower.includes("knuffel")) {
+    if (messageCount === 1 && lower.includes("knuffel")) {
       appendMessage("Philomela", `Onze knuffelconcerten bieden een warme en persoonlijke beleving:<br>
         <a href="https://www.philomela.nl/productie/dierenknuffelconcert/" target="_blank">🧸 Knuffelconcert</a>`, true);
       reset(); return;
     }
 
-    if (lower.includes("concert")) {
+    if (messageCount === 1 && lower.includes("concert")) {
       appendMessage("Philomela", `Bekijk onze concerten:<br>
         <a href="https://www.philomela.nl/agenda" target="_blank">📅 Agenda</a>`, true);
       reset(); return;
     }
 
-    if (lower.includes("meedoen")) {
+    if (messageCount === 1 && lower.includes("meedoen")) {
       appendMessage("Philomela", `Leuk dat je mee wilt doen!<br>
         <a href="https://www.philomela.nl/zwaluwkoren/" target="_blank">🤝 Zwaluwkoren</a>`, true);
       reset(); return;
     }
 
-    if (lower.includes("contact")) {
+    if (messageCount === 1 && lower.includes("contact")) {
       appendMessage("Philomela", `Neem contact met ons op:<br>
         <a href="https://www.philomela.nl/contact/" target="_blank">💌 Contact</a>`, true);
       reset(); return;
@@ -159,7 +163,7 @@
     reset();
   }
 
-  function reset() {
+  function reset(clearSession) {
     const input = document.getElementById("philo-input");
     const sendBtn = document.getElementById("philo-send");
     const typing = document.getElementById("philo-typing");
@@ -167,6 +171,7 @@
     sendBtn.disabled = false;
     typing.style.display = "none";
     input.focus();
+    if (clearSession) messageCount = 0;
   }
 
   // === WIRE UP SEND BUTTON + ENTER KEY ===
