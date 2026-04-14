@@ -1,6 +1,6 @@
 (function () {
 
-  const VERSION = "v0.904";
+  const VERSION = "v0.905";
 
   // === CONVERSATION STATE — keyword shortcuts only fire on the first message ===
   let messageCount = 0;
@@ -195,7 +195,7 @@
   });
 
   // === WELCOME MESSAGE ===
-  appendMessage("Philomela", `Hoi! Waar kunnen we je mee helpen? 😊 Je kunt vragen naar concerten, meedoen (meezingen in een koor), knuffelconcerten of contact.`);
+  appendMessage("Philomela", `Hoi! Waar kunnen we je mee helpen? 😊<br>Je kunt vragen naar concerten, meedoen (meezingen in een koor), knuffelconcerten of contact.<br><br>Hi! How can we help you?<br>Ask about concerts, joining a choir, cuddle concerts or contact.`, true);
 
   // === LANGUAGE BUTTONS ===
   const langDiv = document.createElement("div");
