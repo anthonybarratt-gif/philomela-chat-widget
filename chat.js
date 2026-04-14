@@ -1,6 +1,6 @@
 (function () {
 
-  const VERSION = "v0.912";
+  const VERSION = "v0.913";
 
   // === CONVERSATION STATE — keyword shortcuts only fire on the first message ===
   let messageCount = 0;
@@ -132,6 +132,16 @@
         🧸 Knuffelconcerten → <a href="https://www.philomela.nl/productie/dierenknuffelconcert/" target="_blank">Knuffelconcert</a><br>
         💌 Contact → <a href="https://www.philomela.nl/contact/" target="_blank">Contact</a>
       `, true);
+      reset(); return;
+    }
+
+    if (messageCount === 1 && lower.includes("zwaluw") && !lower.includes("zwaluwkoor") && !lower.includes("zwaluwen")) {
+      const msg = {
+        nl: "Bedoel je het Zwaluwkoor (samen zingen in een koor) of Jonge Zwaluwen (een muziekproject voor kinderen)?",
+        en: "Are you asking about Zwaluwkoor (a community singing choir) or Jonge Zwaluwen (a music project for children)?",
+        fr: "Tu parles du Zwaluwkoor (un chœur communautaire) ou de Jonge Zwaluwen (un projet musical pour enfants) ?"
+      };
+      appendMessage("Philomela", msg[activeLang] || msg.nl);
       reset(); return;
     }
 
