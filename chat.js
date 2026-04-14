@@ -49,7 +49,7 @@
     bottom: "80px",
     right: "20px",
     width: "360px",
-    height: "460px",
+    height: "min(700px, calc(100vh - 120px))",
     background: "white",
     border: "1px solid #ccc",
     borderRadius: "10px",
@@ -64,7 +64,7 @@
       <span>Philomela Chat</span>
       <span id="philo-close" style="cursor:pointer;font-weight:bold;font-size:18px;color:white !important;">✖</span>
     </div>
-    <div id="philo-messages" style="height:350px;overflow:auto;padding:10px;font-size:14px;line-height:1.5;"></div>
+    <div id="philo-messages" style="height:calc(100% - 110px);overflow:auto;padding:10px;font-size:14px;line-height:1.5;"></div>
     <div id="philo-typing" style="padding:0 10px 4px;font-size:12px;color:#999;display:none;">Aria typt...</div>
     <div style="display:flex;border-top:1px solid #eee;">
       <input id="philo-input" placeholder="Waar kunnen we je mee helpen?"
