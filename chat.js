@@ -1,8 +1,8 @@
 (function () {
 
-  const VERSION = "v0.921";
+  const VERSION = "v0.922";
 
-  const HR = `<hr style="border:none;border-top:1px solid #eee;margin:6px 0;">`;
+  const HR = `<hr style="border:none;border-top:2px solid #c8d6e8;margin:8px 0;">`;
   const WELCOME_MSG = `Hoi! Waar kunnen we je mee helpen? 😊<br>Je kunt vragen naar concerten, meedoen (meezingen in een koor), knuffelconcerten of contact.${HR}Hi! How can we help you?<br>Ask about concerts, joining a choir, cuddle concerts or contact.${HR}Bonjour ! Comment pouvons-nous vous aider ?<br>Posez vos questions sur les concerts, chanter dans un chœur, ou contactez-nous.`;
   const LANG_BUTTONS = ["🇳🇱 Nederlands", "🇬🇧 English", "🇫🇷 Français"];
   const LANG_MAP = { "Nederlands": "Nederlands", "English": "English", "Français": "Français" };
