@@ -1,6 +1,6 @@
 (function () {
 
-  const VERSION = "v0.918";
+  const VERSION = "v0.919";
 
   // === CONVERSATION STATE — keyword shortcuts only fire on the first message ===
   let messageCount = 0;
@@ -88,7 +88,7 @@
     <div style="background:#4a6fa5;color:white;padding:10px;border-radius:10px 10px 0 0;display:flex;justify-content:space-between;align-items:center;">
       <span>Philomela Chat <span style="font-size:11px;opacity:0.7;font-weight:normal;">${VERSION}</span></span>
       <span style="display:flex;align-items:center;gap:10px;">
-        <span id="philo-reset" title="Nieuw gesprek" style="cursor:pointer;font-size:14px;opacity:0.85;color:white !important;" >↺</span>
+        <span id="philo-reset" title="Nieuw gesprek" style="cursor:pointer;font-size:11px;color:white !important;border:1px solid rgba(255,255,255,0.6);border-radius:10px;padding:2px 7px;opacity:0.9;white-space:nowrap;">↺ Nieuw</span>
         <span id="philo-close" style="cursor:pointer;font-weight:bold;font-size:18px;color:white !important;">✖</span>
       </span>
     </div>
