@@ -1,6 +1,6 @@
 (function () {
 
-  const VERSION = "v0.927";
+  const VERSION = "v0.928";
 
   const HR = `<hr style="border:none;border-top:2px solid #c8d6e8;margin:8px 0;">`;
   const WELCOME_MSG = `Hoi! Waar kunnen we je mee helpen? 😊<br>Je kunt vragen naar concerten, meedoen (meezingen in een koor), knuffelconcerten, ondersteuning of contact.${HR}Hi! How can we help you?<br>Ask about concerts, joining a choir, cuddle concerts, sponsorship or contact.${HR}Bonjour ! Comment pouvons-nous vous aider ?<br>Posez vos questions sur les concerts, chanter dans un chœur, le soutien financier ou contactez-nous.`;
@@ -224,6 +224,31 @@
         fr: "Tu parles du Zwaluwkoor (un chœur communautaire) ou de Jonge Zwaluwen (un projet musical pour enfants) ?"
       };
       appendMessage("Philomela", msg[activeLang] || msg.nl);
+      reset(); return;
+    }
+
+    if (lower.includes("ondersteuning") || lower.includes("sponsor") || lower.includes("support") || lower.includes("soutien")) {
+      const supportMsg = {
+        nl: `Wat fijn dat je Philomela wilt steunen! 😊<br><br>
+          🔹 <b>Eenmalige donatie:</b><br>
+          <a href="https://payment-links.mollie.com/en/payment/AhWjbi6pvPZrtXh4gKQsb/details" target="_blank">💛 Doneer direct via Mollie</a><br><br>
+          🔹 <b>Structurele samenwerking als sponsor:</b><br>
+          Neem contact op met Merel Huizinga:<br>
+          <a href="mailto:huizinga@philomela.nl">huizinga@philomela.nl</a> — T 06 208 615 87`,
+        en: `How wonderful that you want to support Philomela! 😊<br><br>
+          🔹 <b>One-time donation:</b><br>
+          <a href="https://payment-links.mollie.com/en/payment/AhWjbi6pvPZrtXh4gKQsb/details" target="_blank">💛 Donate directly via Mollie</a><br><br>
+          🔹 <b>Structural sponsorship:</b><br>
+          Contact Merel Huizinga:<br>
+          <a href="mailto:huizinga@philomela.nl">huizinga@philomela.nl</a> — T 06 208 615 87`,
+        fr: `Comme c'est généreux de vouloir soutenir Philomela ! 😊<br><br>
+          🔹 <b>Don unique :</b><br>
+          <a href="https://payment-links.mollie.com/en/payment/AhWjbi6pvPZrtXh4gKQsb/details" target="_blank">💛 Faire un don via Mollie</a><br><br>
+          🔹 <b>Partenariat de sponsoring :</b><br>
+          Contacte Merel Huizinga :<br>
+          <a href="mailto:huizinga@philomela.nl">huizinga@philomela.nl</a> — T 06 208 615 87`
+      };
+      appendMessage("Philomela", supportMsg[activeLang] || supportMsg.nl, true);
       reset(); return;
     }
 
