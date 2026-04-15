@@ -1,6 +1,6 @@
 (function () {
 
-  const VERSION = "v0.928";
+  const VERSION = "v0.929";
 
   const HR = `<hr style="border:none;border-top:2px solid #c8d6e8;margin:8px 0;">`;
   const WELCOME_MSG = `Hoi! Waar kunnen we je mee helpen? 😊<br>Je kunt vragen naar concerten, meedoen (meezingen in een koor), knuffelconcerten, ondersteuning of contact.${HR}Hi! How can we help you?<br>Ask about concerts, joining a choir, cuddle concerts, sponsorship or contact.${HR}Bonjour ! Comment pouvons-nous vous aider ?<br>Posez vos questions sur les concerts, chanter dans un chœur, le soutien financier ou contactez-nous.`;
@@ -339,6 +339,11 @@
       sendMessage(text);
     }
   });
+
+  // === AUTO-OPEN IF ?chat=open IN URL ===
+  if (new URLSearchParams(window.location.search).get("chat") === "open") {
+    chat.style.display = "block";
+  }
 
   // === WELCOME MESSAGE ===
   appendMessage("Philomela", WELCOME_MSG, true);
