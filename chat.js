@@ -1,9 +1,9 @@
 (function () {
 
-  const VERSION = "v0.924";
+  const VERSION = "v0.926";
 
   const HR = `<hr style="border:none;border-top:2px solid #c8d6e8;margin:8px 0;">`;
-  const WELCOME_MSG = `Hoi! Waar kunnen we je mee helpen? 😊<br>Je kunt vragen naar concerten, meedoen (meezingen in een koor), knuffelconcerten of contact.${HR}Hi! How can we help you?<br>Ask about concerts, joining a choir, cuddle concerts or contact.${HR}Bonjour ! Comment pouvons-nous vous aider ?<br>Posez vos questions sur les concerts, chanter dans un chœur, ou contactez-nous.`;
+  const WELCOME_MSG = `Hoi! Waar kunnen we je mee helpen? 😊<br>Je kunt vragen naar concerten, meedoen (meezingen in een koor), knuffelconcerten, ondersteuning of contact.${HR}Hi! How can we help you?<br>Ask about concerts, joining a choir, cuddle concerts, sponsorship or contact.${HR}Bonjour ! Comment pouvons-nous vous aider ?<br>Posez vos questions sur les concerts, chanter dans un chœur, le soutien financier ou contactez-nous.`;
   const LANG_BUTTONS = ["🇳🇱 Nederlands", "🇬🇧 English", "🇫🇷 Français"];
   const LANG_MAP = { "Nederlands": "Nederlands", "English": "English", "Français": "Français" };
 
@@ -79,7 +79,7 @@
     bottom: "80px",
     right: "20px",
     width: "360px",
-    height: "min(700px, calc(100vh - 120px))",
+    height: "min(805px, calc(100vh - 120px))",
     background: "white",
     border: "1px solid #ccc",
     borderRadius: "10px",
