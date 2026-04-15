@@ -1,6 +1,6 @@
 (function () {
 
-  const VERSION = "v0.922";
+  const VERSION = "v0.924";
 
   const HR = `<hr style="border:none;border-top:2px solid #c8d6e8;margin:8px 0;">`;
   const WELCOME_MSG = `Hoi! Waar kunnen we je mee helpen? 😊<br>Je kunt vragen naar concerten, meedoen (meezingen in een koor), knuffelconcerten of contact.${HR}Hi! How can we help you?<br>Ask about concerts, joining a choir, cuddle concerts or contact.${HR}Bonjour ! Comment pouvons-nous vous aider ?<br>Posez vos questions sur les concerts, chanter dans un chœur, ou contactez-nous.`;
@@ -233,17 +233,7 @@
       reset(); return;
     }
 
-    if (messageCount === 1 && lower.includes("concert")) {
-      appendMessage("Philomela", `Bekijk onze concerten:<br>
-        <a href="https://www.philomela.nl/agenda" target="_blank">📅 Agenda</a>`, true);
-      reset(); return;
-    }
 
-    if (messageCount === 1 && lower.includes("meedoen")) {
-      appendMessage("Philomela", `Leuk dat je mee wilt doen!<br>
-        <a href="https://www.philomela.nl/zwaluwkoren/" target="_blank">🤝 Zwaluwkoren</a>`, true);
-      reset(); return;
-    }
 
     if (messageCount === 1 && lower.includes("contact")) {
       appendMessage("Philomela", `Neem contact met ons op:<br>
