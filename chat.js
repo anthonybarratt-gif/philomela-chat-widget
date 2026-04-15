@@ -1,6 +1,6 @@
 (function () {
 
-  const VERSION = "v0.926";
+  const VERSION = "v0.927";
 
   const HR = `<hr style="border:none;border-top:2px solid #c8d6e8;margin:8px 0;">`;
   const WELCOME_MSG = `Hoi! Waar kunnen we je mee helpen? 😊<br>Je kunt vragen naar concerten, meedoen (meezingen in een koor), knuffelconcerten, ondersteuning of contact.${HR}Hi! How can we help you?<br>Ask about concerts, joining a choir, cuddle concerts, sponsorship or contact.${HR}Bonjour ! Comment pouvons-nous vous aider ?<br>Posez vos questions sur les concerts, chanter dans un chœur, le soutien financier ou contactez-nous.`;
@@ -224,6 +224,16 @@
         fr: "Tu parles du Zwaluwkoor (un chœur communautaire) ou de Jonge Zwaluwen (un projet musical pour enfants) ?"
       };
       appendMessage("Philomela", msg[activeLang] || msg.nl);
+      reset(); return;
+    }
+
+    if (lower.includes("eenmalig") || lower.includes("donati") || lower.includes("one-time") || lower.includes("don ") || lower.includes("donate")) {
+      const donateMsg = {
+        nl: `Wat fijn! 😊 Je kunt een eenmalige bijdrage doen via:<br><a href="https://payment-links.mollie.com/en/payment/AhWjbi6pvPZrtXh4gKQsb/details" target="_blank">💛 Eenmalige donatie aan Philomela</a><br><br>Voor structurele samenwerking kun je contact opnemen met Merel: <a href="mailto:huizinga@philomela.nl">huizinga@philomela.nl</a>`,
+        en: `How wonderful! 😊 You can make a one-time donation here:<br><a href="https://payment-links.mollie.com/en/payment/AhWjbi6pvPZrtXh4gKQsb/details" target="_blank">💛 One-time donation to Philomela</a><br><br>For sponsorship partnerships contact Merel: <a href="mailto:huizinga@philomela.nl">huizinga@philomela.nl</a>`,
+        fr: `Comme c'est généreux ! 😊 Tu peux faire un don unique ici :<br><a href="https://payment-links.mollie.com/en/payment/AhWjbi6pvPZrtXh4gKQsb/details" target="_blank">💛 Don unique à Philomela</a><br><br>Pour un partenariat de sponsoring contacte Merel : <a href="mailto:huizinga@philomela.nl">huizinga@philomela.nl</a>`
+      };
+      appendMessage("Philomela", donateMsg[activeLang] || donateMsg.nl, true);
       reset(); return;
     }
 
