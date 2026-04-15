@@ -1,12 +1,13 @@
 (function () {
 
-  const VERSION = "v0.917";
+  const VERSION = "v0.918";
 
   // === CONVERSATION STATE — keyword shortcuts only fire on the first message ===
   let messageCount = 0;
-  let userLabel = "Jij";          // switches on language selection
-  let activeLang = "nl";          // "nl" | "en" | "fr"
+  let userLabel = "Jij";           // switches on language selection
+  let activeLang = "nl";           // "nl" | "en" | "fr"
   let awaitingConfirmation = false; // true after Aria offers handoff
+  let history = [];                 // conversation history sent to backend (max 10 messages)
 
   // === SESSION ID — persists across page reloads so Aria remembers the conversation ===
   let sessionId = sessionStorage.getItem("philomela_session_id");
@@ -84,16 +85,19 @@
   });
 
   chat.innerHTML = `
-    <div style="background:#2d4b8c;color:white;padding:10px;border-radius:10px 10px 0 0;display:flex;justify-content:space-between;align-items:center;">
+    <div style="background:#4a6fa5;color:white;padding:10px;border-radius:10px 10px 0 0;display:flex;justify-content:space-between;align-items:center;">
       <span>Philomela Chat <span style="font-size:11px;opacity:0.7;font-weight:normal;">${VERSION}</span></span>
-      <span id="philo-close" style="cursor:pointer;font-weight:bold;font-size:18px;color:white !important;">✖</span>
+      <span style="display:flex;align-items:center;gap:10px;">
+        <span id="philo-reset" title="Nieuw gesprek" style="cursor:pointer;font-size:14px;opacity:0.85;color:white !important;" >↺</span>
+        <span id="philo-close" style="cursor:pointer;font-weight:bold;font-size:18px;color:white !important;">✖</span>
+      </span>
     </div>
     <div id="philo-messages" style="height:calc(100% - 110px);overflow:auto;padding:10px;font-size:14px;line-height:1.5;"></div>
     <div id="philo-typing" style="padding:0 10px 4px;font-size:12px;color:#999;display:none;">Aria typt...</div>
     <div style="display:flex;border-top:1px solid #eee;">
       <input id="philo-input" placeholder="Waar kunnen we je mee helpen?"
         style="flex:1;padding:8px;border:none;outline:none;font-size:14px;border-radius:0 0 0 10px;">
-      <button id="philo-send" style="padding:8px 12px;background:#2d4b8c;color:white;border:none;border-radius:0 0 10px 0;cursor:pointer;font-size:16px;">→</button>
+      <button id="philo-send" style="padding:8px 12px;background:#4a6fa5;color:white;border:none;border-radius:0 0 10px 0;cursor:pointer;font-size:16px;">→</button>
     </div>
   `;
 
@@ -105,6 +109,26 @@
   };
   document.getElementById("philo-close").onclick = () => {
     chat.style.display = "none";
+  };
+
+  document.getElementById("philo-reset").onclick = () => {
+    const messages = document.getElementById("philo-messages");
+    messages.innerHTML = "";
+    reset(true);
+    // Re-show welcome message and language buttons
+    appendMessage("Philomela", `Hoi! Waar kunnen we je mee helpen? 😊<br>Je kunt vragen naar concerten, meedoen (meezingen in een koor), knuffelconcerten of contact.<br><br>Hi! How can we help you?<br>Ask about concerts, joining a choir, cuddle concerts or contact.`, true);
+    const langDiv = document.createElement("div");
+    langDiv.id = "philo-lang";
+    langDiv.style.cssText = "padding:4px 10px 8px;display:flex;gap:8px;";
+    ["🇳🇱 Nederlands", "🇬🇧 English"].forEach((label) => {
+      const btn = document.createElement("button");
+      btn.textContent = label;
+      btn.style.cssText = `padding:4px 10px;font-size:12px;cursor:pointer;border:1px solid #4a6fa5;border-radius:12px;background:white;color:#4a6fa5;`;
+      btn.onclick = () => { langDiv.remove(); sendMessage(label.includes("English") ? "English" : "Nederlands"); };
+      langDiv.appendChild(btn);
+    });
+    messages.appendChild(langDiv);
+    document.getElementById("philo-input").placeholder = "Waar kunnen we je mee helpen?";
   };
 
   // === SEND MESSAGE ===
@@ -227,13 +251,17 @@
       const res = await fetch("https://castoton-ai-chatbot.onrender.com/webhook", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: text, session_id: sessionId, language: activeLang })
+        body: JSON.stringify({ message: text, session_id: sessionId, language: activeLang, history: history.slice(-10) })
       });
 
       if (!res.ok) throw new Error(`Server error: ${res.status}`);
 
       const data = await res.json();
       appendMessage("Philomela", data.reply);
+
+      // Store exchange in history
+      history.push({ role: "user", content: text });
+      history.push({ role: "assistant", content: data.reply });
 
       // Detect handoff offer in Aria's reply
       const handoffPhrases = ["contact met je opneemt", "contact opnemen", "benadert", "get in touch", "reach out", "te contacter", "te contacte"];
@@ -257,7 +285,7 @@
     sendBtn.disabled = false;
     typing.style.display = "none";
     input.focus();
-    if (clearSession) { messageCount = 0; userLabel = "Jij"; activeLang = "nl"; awaitingConfirmation = false; }
+    if (clearSession) { messageCount = 0; userLabel = "Jij"; activeLang = "nl"; awaitingConfirmation = false; history = []; }
   }
 
   // === WIRE UP SEND BUTTON + ENTER KEY ===
@@ -293,8 +321,8 @@
     btn.textContent = label;
     btn.style.cssText = `
       padding:4px 10px;font-size:12px;cursor:pointer;
-      border:1px solid #2d4b8c;border-radius:12px;
-      background:white;color:#2d4b8c;
+      border:1px solid #4a6fa5;border-radius:12px;
+      background:white;color:#4a6fa5;
     `;
     btn.onclick = () => {
       const lang = label.includes("English") ? "English" : "Nederlands";
