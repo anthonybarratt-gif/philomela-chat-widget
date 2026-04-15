@@ -1,6 +1,11 @@
 (function () {
 
-  const VERSION = "v0.920";
+  const VERSION = "v0.921";
+
+  const HR = `<hr style="border:none;border-top:1px solid #eee;margin:6px 0;">`;
+  const WELCOME_MSG = `Hoi! Waar kunnen we je mee helpen? 😊<br>Je kunt vragen naar concerten, meedoen (meezingen in een koor), knuffelconcerten of contact.${HR}Hi! How can we help you?<br>Ask about concerts, joining a choir, cuddle concerts or contact.${HR}Bonjour ! Comment pouvons-nous vous aider ?<br>Posez vos questions sur les concerts, chanter dans un chœur, ou contactez-nous.`;
+  const LANG_BUTTONS = ["🇳🇱 Nederlands", "🇬🇧 English", "🇫🇷 Français"];
+  const LANG_MAP = { "Nederlands": "Nederlands", "English": "English", "Français": "Français" };
 
   // === CONVERSATION STATE — keyword shortcuts only fire on the first message ===
   let messageCount = 0;
@@ -116,15 +121,16 @@
     messages.innerHTML = "";
     reset(true);
     // Re-show welcome message and language buttons
-    appendMessage("Philomela", `Hoi! Waar kunnen we je mee helpen? 😊<br>Je kunt vragen naar concerten, meedoen (meezingen in een koor), knuffelconcerten of contact.<br><br>Hi! How can we help you?<br>Ask about concerts, joining a choir, cuddle concerts or contact.`, true);
+    appendMessage("Philomela", WELCOME_MSG, true);
     const langDiv = document.createElement("div");
     langDiv.id = "philo-lang";
-    langDiv.style.cssText = "padding:4px 10px 8px;display:flex;gap:8px;";
-    ["🇳🇱 Nederlands", "🇬🇧 English"].forEach((label) => {
+    langDiv.style.cssText = "padding:4px 10px 8px;display:flex;gap:6px;flex-wrap:wrap;";
+    LANG_BUTTONS.forEach((label) => {
       const btn = document.createElement("button");
       btn.textContent = label;
       btn.style.cssText = `padding:4px 10px;font-size:12px;cursor:pointer;border:1px solid #4a6fa5;border-radius:12px;background:white;color:#4a6fa5;`;
-      btn.onclick = () => { langDiv.remove(); sendMessage(label.includes("English") ? "English" : "Nederlands"); };
+      const key = Object.keys(LANG_MAP).find(k => label.includes(k));
+      btn.onclick = () => { langDiv.remove(); sendMessage(LANG_MAP[key]); };
       langDiv.appendChild(btn);
     });
     messages.appendChild(langDiv);
@@ -310,26 +316,19 @@
   });
 
   // === WELCOME MESSAGE ===
-  appendMessage("Philomela", `Hoi! Waar kunnen we je mee helpen? 😊<br>Je kunt vragen naar concerten, meedoen (meezingen in een koor), knuffelconcerten of contact.<br><br>Hi! How can we help you?<br>Ask about concerts, joining a choir, cuddle concerts or contact.`, true);
+  appendMessage("Philomela", WELCOME_MSG, true);
 
   // === LANGUAGE BUTTONS ===
   const langDiv = document.createElement("div");
   langDiv.id = "philo-lang";
-  langDiv.style.cssText = "padding:4px 10px 8px;display:flex;gap:8px;";
+  langDiv.style.cssText = "padding:4px 10px 8px;display:flex;gap:6px;flex-wrap:wrap;";
 
-  ["🇳🇱 Nederlands", "🇬🇧 English"].forEach((label) => {
+  LANG_BUTTONS.forEach((label) => {
     const btn = document.createElement("button");
     btn.textContent = label;
-    btn.style.cssText = `
-      padding:4px 10px;font-size:12px;cursor:pointer;
-      border:1px solid #4a6fa5;border-radius:12px;
-      background:white;color:#4a6fa5;
-    `;
-    btn.onclick = () => {
-      const lang = label.includes("English") ? "English" : "Nederlands";
-      langDiv.remove();
-      sendMessage(lang);
-    };
+    btn.style.cssText = `padding:4px 10px;font-size:12px;cursor:pointer;border:1px solid #4a6fa5;border-radius:12px;background:white;color:#4a6fa5;`;
+    const key = Object.keys(LANG_MAP).find(k => label.includes(k));
+    btn.onclick = () => { langDiv.remove(); sendMessage(LANG_MAP[key]); };
     langDiv.appendChild(btn);
   });
 
